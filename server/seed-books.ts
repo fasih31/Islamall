@@ -12,7 +12,7 @@ const AUTHENTIC_BOOKS = [
     description: "Core modern reference for Sharia-compliant banking and Islamic financial principles. Essential reading for understanding halal investment, riba-free transactions, and ethical finance.",
     language: "English, Urdu",
     isFeatured: true,
-    purchaseUrl: "https://www.daruishaat.com"
+    purchaseUrl: "https://www.amazon.com/Introduction-Islamic-Finance-Taqi-Usmani/dp/9699988005"
   },
   {
     title: "Kitab al-Kharaj",
@@ -77,6 +77,7 @@ const AUTHENTIC_BOOKS = [
     description: "The Gardens of the Righteous - essential collection of Hadith for daily etiquettes, worship, and good deeds. A must-read for every Muslim.",
     language: "Arabic, English, Urdu",
     isFeatured: true,
+    purchaseUrl: "https://www.amazon.com/Riyad-us-Saliheen-2-Vol-Set/dp/9960740188"
   },
   {
     title: "Hisn al-Muslim (Fortress of the Muslim)",

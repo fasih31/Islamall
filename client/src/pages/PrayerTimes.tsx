@@ -51,29 +51,52 @@ export default function PrayerTimesPage() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          setLat(latitude.toString());
-          setLon(longitude.toString());
+          setLat(latitude.toFixed(6));
+          setLon(longitude.toFixed(6));
           
           // Reverse geocode to get location name
           try {
             const res = await fetch(
-              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+              { headers: { 'User-Agent': 'IslamicCompassPortal/1.0' } }
             );
-            const data = await res.json();
-            setLocation(data.address.city || data.address.town || data.address.village || "Your Location");
+            if (res.ok) {
+              const data = await res.json();
+              const locationName = data.address.city || 
+                                 data.address.town || 
+                                 data.address.village || 
+                                 data.address.county ||
+                                 data.address.state ||
+                                 "Your Location";
+              setLocation(locationName);
+            } else {
+              setLocation("Your Location");
+            }
           } catch (error) {
+            console.error("Geocoding error:", error);
             setLocation("Your Location");
           }
           setIsGettingLocation(false);
         },
         (error) => {
-          console.error("Error getting location:", error);
-          setLocation("New York");
+          console.error("Geolocation error:", error);
+          // Set default to Mecca
+          setLat("21.4225");
+          setLon("39.8262");
+          setLocation("Mecca");
           setIsGettingLocation(false);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
         }
       );
     } else {
-      setLocation("New York");
+      // Default to Mecca if geolocation not supported
+      setLat("21.4225");
+      setLon("39.8262");
+      setLocation("Mecca");
       setIsGettingLocation(false);
     }
   };

@@ -188,13 +188,20 @@ export default function DuaPage() {
                 <Card className="bg-primary/5">
                   <CardContent className="pt-6">
                     <h3 className="font-semibold mb-3">Recommended for: {SCENARIOS.find(s => s.id === selectedScenario)?.label}</h3>
-                    <div className="space-y-3">
-                      {recommendation.duas.map((dua, i) => (
-                        <div key={i} className="p-3 bg-background rounded-md">
-                          <p className="font-arabic text-lg text-right mb-2" dir="rtl">{dua.textArabic}</p>
-                          <p className="text-sm text-muted-foreground">{dua.translationEn}</p>
-                        </div>
-                      ))}
+                    <div className="space-y-4">
+                      {recommendation.duas && recommendation.duas.length > 0 ? (
+                        recommendation.duas.map((dua, i) => (
+                          <div key={i} className="p-4 bg-background rounded-md border">
+                            <p className="font-arabic text-xl text-right mb-3 leading-loose" dir="rtl">{dua.textArabic}</p>
+                            <p className="text-sm">{dua.translationEn}</p>
+                            {dua.reference && (
+                              <Badge variant="outline" className="mt-2">{dua.reference}</Badge>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-muted-foreground text-sm">Loading recommendations...</p>
+                      )}
                     </div>
                   </CardContent>
                 </Card>

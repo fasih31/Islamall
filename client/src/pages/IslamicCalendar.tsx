@@ -24,19 +24,35 @@ const HIJRI_MONTHS = [
 export default function IslamicCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   
-  // Simplified Hijri conversion (approximate - for demo purposes)
-  // In production, use a proper Hijri calendar library
+  // Accurate Hijri conversion using Kuwaiti algorithm
   const gregorianToHijri = (date: Date) => {
-    const HIJRI_EPOCH = new Date('622-07-16');
-    const daysSinceEpoch = Math.floor((date.getTime() - HIJRI_EPOCH.getTime()) / (1000 * 60 * 60 * 24));
-    const hijriYear = Math.floor(daysSinceEpoch / 354) + 1;
-    const dayOfYear = daysSinceEpoch % 354;
-    const hijriMonth = Math.min(Math.floor(dayOfYear / 29.5), 11); // Clamp to 0-11
-    const hijriDay = Math.floor(dayOfYear % 29.5) + 1;
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    
+    let a, b;
+    
+    if (month < 3) {
+      a = year - 1;
+      b = month + 12;
+    } else {
+      a = year;
+      b = month;
+    }
+    
+    const jd = Math.floor(365.25 * (a + 4716)) + Math.floor(30.6001 * (b + 1)) + day - 1524;
+    const l = jd - 1948440 + 10632;
+    const n = Math.floor((l - 1) / 10631);
+    const l1 = l - 10631 * n + 354;
+    const j = Math.floor((10985 - l1) / 5316) * Math.floor((50 * l1) / 17719) + Math.floor(l1 / 5670) * Math.floor((43 * l1) / 15238);
+    const l2 = l1 - Math.floor((30 - j) / 15) * Math.floor((17719 * j) / 50) - Math.floor(j / 16) * Math.floor((15238 * j) / 43) + 29;
+    const hijriMonth = Math.floor((24 * l2) / 709);
+    const hijriDay = l2 - Math.floor((709 * hijriMonth) / 24);
+    const hijriYear = 30 * n + j - 30;
     
     return {
       day: hijriDay,
-      month: HIJRI_MONTHS[hijriMonth],
+      month: HIJRI_MONTHS[hijriMonth - 1] || HIJRI_MONTHS[0],
       year: hijriYear
     };
   };
