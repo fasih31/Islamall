@@ -3,14 +3,12 @@ import { BookOpen, Search } from "lucide-react";
 import heroImage from "@assets/stock_images/islamic_geometric_pa_f1702c49.jpg";
 import { useQuery } from "@tanstack/react-query";
 
-// Define Ayah type if not already defined elsewhere
-// For example:
-// interface Ayah {
-//   textArabic: string;
-//   translationEn: string;
-//   surahId: number;
-//   ayahNumber: number;
-// }
+interface Ayah {
+  textArabic: string;
+  translationEn: string;
+  surahId: number;
+  ayahNumber: number;
+}
 
 export function Hero() {
   const { data: randomAyah } = useQuery<Ayah>({

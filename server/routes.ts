@@ -3,7 +3,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { db } from "@db";
-import { ayahs, surahs, hadith, hadithBooks, hadithChapters, reciterTable } from "@shared/schema";
+import { ayahs, surahs, hadith, hadithBooks, hadithChapters, reciters } from "@shared/schema";
 import { eq, sql } from "drizzle-orm";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { generateArabicSpeech, extractTextFromImage, saveAudioFile, analyzeQuranicVerse, validateHadith } from "./openai";
@@ -441,11 +441,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Reciters endpoint with default data if database is empty
   app.get("/api/reciters", async (req, res) => {
     try {
-      let reciters = await db.select().from(reciterTable);
+      let recitersList = await db.select().from(reciters);
 
       // If no reciters in database, return default authentic reciters
-      if (!reciters || reciters.length === 0) {
-        reciters = [
+      if (!recitersList || recitersList.length === 0) {
+        recitersList = [
           {
             id: "1",
             name: "Mishary Rashid Alafasy",
@@ -484,7 +484,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ];
       }
 
-      res.json(reciters);
+      res.json(recitersList);
     } catch (error) {
       console.error("Error fetching reciters:", error);
       res.status(500).json({ message: "Failed to fetch reciters" });

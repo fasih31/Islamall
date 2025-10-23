@@ -92,7 +92,7 @@ export default function QuranRead() {
       // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
       
-      if (!audioUrl) {
+      if (!audioUrl || audioUrl.trim() === '') {
         console.error("No audio URL available for this ayah");
         setPlayingAyah(null);
         return;

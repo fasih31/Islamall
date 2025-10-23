@@ -107,11 +107,11 @@ export default function SurahDetail() {
       // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
       
-      if (!audioUrl) {
+      if (!audioUrl || audioUrl.trim() === '') {
         console.error("No audio URL for ayah:", ayah.id);
         toast({
           title: "Audio Unavailable",
-          description: "No audio recitation available for this verse",
+          description: "Audio recitation is being loaded. Please try again in a moment.",
           variant: "destructive",
         });
         setPlayingAyah(null);

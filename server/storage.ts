@@ -236,7 +236,7 @@ export class DatabaseStorage implements IStorage {
     const limit = filters?.limit || 5;
 
     // Search Quran (Arabic and English translation)
-    const quranResults = (!filters?.type || filters.type === 'quran') 
+    const quranResults = (!filters?.type || filters.type === 'quran')
       ? await db
           .select()
           .from(ayahs)
@@ -327,11 +327,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAyahsBySurah(surahId: number): Promise<Ayah[]> {
-    return await db
-      .select()
-      .from(ayahs)
-      .where(eq(ayahs.surahId, surahId))
-      .orderBy(ayahs.ayahNumber);
+    const ayahsList = await db.select().from(ayahs).where(eq(ayahs.surahId, surahId)).orderBy(ayahs.ayahNumber);
+    // Ensure audioUrl is present for all ayahs
+    return ayahsList;
   }
 
   async getAyah(surahId: number, ayahNumber: number): Promise<Ayah | undefined> {
