@@ -90,19 +90,29 @@ export default function QuranRead() {
     try {
       setLoadingAudio(ayah.id);
       
-      let audioUrl = ayah.audioUrl;
+      const paddedSurah = String(ayah.surahId).padStart(3, '0');
+      const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
       
-      // Fallback: Generate audio URL if missing
-      if (!audioUrl || audioUrl.trim() === '') {
-        const paddedSurah = String(ayah.surahId).padStart(3, '0');
-        const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
-        audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
+      // Build audio URL based on selected reciter
+      let audioUrl: string;
+      
+      if (!ayah.audioUrl || ayah.audioUrl.trim() === '') {
+        console.log("No audio URL for ayah:", ayah.id);
       }
       
-      if (selectedReciter !== "mishary_rashid") {
-        const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
-        audioUrl = audioUrl.replace(/(Alafasy|ar\.[a-z]+)/, reciterCode.replace('ar.', ''));
-      }
+      // Map reciters to their audio directories on everyayah.com
+      const reciterDirectories: Record<string, string> = {
+        "mishary_rashid": "Alafasy_128kbps",
+        "abdul_basit": "Abdul_Basit_Murattal_192kbps",
+        "abdulrahman_sudais": "Abdurrahmaan_As-Sudais_192kbps",
+        "saad_al_ghamdi": "Ghamadi_40kbps",
+        "maher_al_muaiqly": "MaherAlMuaiqly128kbps",
+      };
+      
+      const reciterDir = reciterDirectories[selectedReciter] || "Alafasy_128kbps";
+      audioUrl = `https://everyayah.com/data/${reciterDir}/${paddedSurah}${paddedAyah}.mp3`;
+      
+      console.log(`Playing: ${audioUrl}`);
       
       const audio = new Audio(audioUrl);
       audio.preload = "auto";
@@ -114,9 +124,10 @@ export default function QuranRead() {
       
       audio.onended = () => setPlayingAyah(null);
       audio.onerror = (e) => {
-        console.error("Audio playback error:", e);
+        console.error("Audio playback error:", audioUrl, e);
         setLoadingAudio(null);
         setPlayingAyah(null);
+        alert(`Audio not available for this reciter. URL: ${audioUrl}`);
       };
       
       await audio.play();

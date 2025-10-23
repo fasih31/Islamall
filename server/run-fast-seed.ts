@@ -147,18 +147,19 @@ async function fastSeed() {
         const paddedSurah = String(surahData.id).padStart(3, '0');
         const paddedAyah = String(i + 1).padStart(3, '0');
         
-        // Use reliable audio source
+        // Generate proper audio URL with verified format
         const audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
         
-        await db.insert(ayahs).values({
+        const ayahRecord = {
           surahId: surahData.id,
           ayahNumber: i + 1,
           textArabic: ayahData.text,
           translationEn: ayahData.translation,
           audioUrl: audioUrl,
-        });
+        };
         
-        console.log(`  ✅ Ayah ${i + 1}: ${audioUrl}`);
+        await db.insert(ayahs).values(ayahRecord);
+        console.log(`  ✅ Ayah ${i + 1} - Audio: ${audioUrl}`);
       }
       console.log(`✅ Inserted Surah ${surahData.name} with ${surahData.ayahs.length} ayahs`);
     }

@@ -92,11 +92,11 @@ export default function SurahDetail() {
   });
 
   const currentTranslator = TRANSLATORS.find(t => t.value === selectedTranslator);
-  
+
   const { data: reciters } = useQuery<Reciter[]>({
     queryKey: ["/api/reciters"],
   });
-  
+
   const { data: translations } = useQuery<Translation[]>({
     queryKey: ["/api/quran/translations", surahId, currentTranslator?.language, currentTranslator?.name],
     enabled: !!surahId && !!currentTranslator,
@@ -107,51 +107,53 @@ export default function SurahDetail() {
       setLoadingAudio(ayah.id);
       setAudioError(null);
       setPlayingAyah(null);
-      
-      let audioUrl = ayah.audioUrl;
-      
-      // Fallback: Generate audio URL if missing
-      if (!audioUrl || audioUrl.trim() === '') {
-        const paddedSurah = String(ayah.surahId).padStart(3, '0');
-        const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
-        audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
-      }
-      
-      // Replace reciter if not default
-      if (selectedReciter !== "mishary_rashid") {
-        const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
-        audioUrl = audioUrl.replace(/(Alafasy|ar\.[a-z]+)/, reciterCode.replace('ar.', ''));
-      }
-      
+
+      const paddedSurah = String(ayah.surahId).padStart(3, '0');
+      const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
+
+      // Map reciters to their audio directories
+      const reciterDirectories: Record<string, string> = {
+        "mishary_rashid": "Alafasy_128kbps",
+        "abdul_basit": "Abdul_Basit_Murattal_192kbps",
+        "abdulrahman_sudais": "Abdurrahmaan_As-Sudais_192kbps",
+        "saad_al_ghamdi": "Ghamadi_40kbps",
+        "maher_al_muaiqly": "MaherAlMuaiqly128kbps",
+      };
+
+      const reciterDir = reciterDirectories[selectedReciter] || "Alafasy_128kbps";
+      const audioUrl = `https://everyayah.com/data/${reciterDir}/${paddedSurah}${paddedAyah}.mp3`;
+
+      console.log(`Playing audio: ${audioUrl}`);
+
       const audio = new Audio(audioUrl);
-      
+
       // Preload audio
       audio.preload = "auto";
-      
+
       audio.oncanplaythrough = () => {
         setLoadingAudio(null);
         setPlayingAyah(ayah.id);
       };
-      
+
       audio.onended = () => {
         setPlayingAyah(null);
       };
-      
+
       audio.onerror = (e) => {
         console.error("Audio error for", audioUrl, e);
         setLoadingAudio(null);
         setPlayingAyah(null);
         setAudioError(ayah.id);
-        
+
         toast({
           title: "Audio Unavailable",
           description: "Unable to load recitation. The audio file may not be available.",
           variant: "destructive",
         });
       };
-      
+
       await audio.play();
-      
+
       const reciterName = reciters?.find(r => r.identifier === selectedReciter)?.name || "Mishary Rashid Alafasy";
       toast({
         title: "Playing Recitation",
@@ -162,7 +164,7 @@ export default function SurahDetail() {
       setLoadingAudio(null);
       setPlayingAyah(null);
       setAudioError(ayah.id);
-      
+
       toast({
         title: "Playback Error",
         description: "Failed to play audio. Please check your connection.",
@@ -173,11 +175,11 @@ export default function SurahDetail() {
 
   const getTranslation = (ayahId: string): string => {
     if (!currentTranslator) return "";
-    
+
     const translation = translations?.find(t => 
       t.ayahId === ayahId && t.translatorName === currentTranslator.name
     );
-    
+
     return translation?.text || ayahs?.find(a => a.id === ayahId)?.translationEn || "";
   };
 
