@@ -329,7 +329,22 @@ export class DatabaseStorage implements IStorage {
   async getAyahsBySurah(surahId: number): Promise<Ayah[]> {
     const ayahsList = await db.select().from(ayahs).where(eq(ayahs.surahId, surahId)).orderBy(ayahs.ayahNumber);
     // Ensure audioUrl is present for all ayahs
-    return ayahsList;
+    const ayahsWithAudio = ayahsList.map(ayah => {
+      const paddedSurah = String(ayah.surahId).padStart(3, '0');
+      const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
+      const audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
+
+      return {
+        ...ayah,
+        audioUrl: audioUrl, // Always use generated URL
+      };
+    });
+
+    if (ayahsWithAudio.length > 0) {
+      console.log(`First ayah audio URL: ${ayahsWithAudio[0].audioUrl}`);
+    }
+
+    return ayahsWithAudio;
   }
 
   async getAyah(surahId: number, ayahNumber: number): Promise<Ayah | undefined> {
