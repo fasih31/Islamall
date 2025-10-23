@@ -61,6 +61,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const surahId = parseInt(req.params.id);
       const ayahs = await storage.getAyahsBySurah(surahId);
+      
+      // Check if first ayah has audio URL for debugging
+      if (ayahs.length > 0) {
+        console.log("First ayah audio URL:", ayahs[0].audioUrl ? "Present" : "Missing");
+      }
+      
       res.json(ayahs);
     } catch (error) {
       console.error("Error fetching ayahs:", error);

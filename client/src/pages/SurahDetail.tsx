@@ -106,28 +106,33 @@ export default function SurahDetail() {
       
       // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
-      if (audioUrl && selectedReciter !== "mishary_rashid") {
-        const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
-        // Replace the reciter code in the URL (e.g., ar.alafasy -> ar.abdulbasitmurattal)
-        audioUrl = audioUrl.replace(/ar\.[a-z]+/, reciterCode);
-      }
       
       if (!audioUrl) {
+        console.error("No audio URL for ayah:", ayah.id);
         toast({
           title: "Audio Unavailable",
           description: "No audio recitation available for this verse",
           variant: "destructive",
         });
+        setPlayingAyah(null);
         return;
       }
       
+      if (selectedReciter !== "mishary_rashid") {
+        const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
+        // Replace the reciter code in the URL (e.g., ar.alafasy -> ar.abdulbasitmurattal)
+        audioUrl = audioUrl.replace(/ar\.[a-z]+/, reciterCode);
+      }
+      
+      console.log("Playing audio from:", audioUrl);
       const audio = new Audio(audioUrl);
       
       audio.onended = () => {
         setPlayingAyah(null);
       };
       
-      audio.onerror = () => {
+      audio.onerror = (e) => {
+        console.error("Audio error:", e);
         setPlayingAyah(null);
         toast({
           title: "Playback Error",

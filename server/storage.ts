@@ -100,7 +100,7 @@ export interface IStorage {
   getAllHadith(limit?: number, offset?: number): Promise<Hadith[]>;
   getHadithCount(): Promise<number>;
   getHadithChapters(book: string): Promise<string[]>;
-  
+
   // Hadith Book methods
   getAllHadithBooks(): Promise<HadithBook[]>;
   getHadithBookById(id: string): Promise<HadithBook | undefined>;
@@ -116,7 +116,7 @@ export interface IStorage {
   getAllEvents(): Promise<Event[]>;
   getEventById(id: string): Promise<Event | undefined>;
   createEvent(event: InsertEvent): Promise<Event>;
-  
+
   // Event RSVP methods
   createEventRsvp(rsvp: InsertEventRsvp): Promise<EventRsvp>;
   getEventRsvps(eventId: string): Promise<EventRsvp[]>;
@@ -175,7 +175,7 @@ export interface IStorage {
   getTopicBySlug(slug: string): Promise<Topic | undefined>;
   getTopicsBySection(section: string): Promise<Topic[]>;
   createTopic(topic: InsertTopic): Promise<Topic>;
-  
+
   // Topic Content methods
   getTopicContent(topicId: string): Promise<EnrichedTopicContent[]>;
   createTopicContent(content: InsertTopicContent): Promise<TopicContent>;
@@ -388,12 +388,12 @@ export class DatabaseStorage implements IStorage {
   async getAllHadith(limit: number = 50, offset: number = 0): Promise<Hadith[]> {
     return await db.select().from(hadith).limit(limit).offset(offset);
   }
-  
+
   async getHadithCount(): Promise<number> {
     const result = await db.select({ count: sql<number>`count(*)::int` }).from(hadith);
     return result[0].count;
   }
-  
+
   async getHadithChapters(book: string): Promise<string[]> {
     const result = await db.selectDistinct({ chapter: hadith.chapter })
       .from(hadith)
@@ -559,7 +559,46 @@ export class DatabaseStorage implements IStorage {
 
   // Reciter methods
   async getAllReciters(): Promise<Reciter[]> {
-    return await db.select().from(reciters);
+    // Return default reciters if none in database
+    const dbReciters = await db.select().from(reciters);
+
+    if (dbReciters.length === 0) {
+      // Return popular reciters as fallback
+      return [
+        {
+          id: "mishary_rashid",
+          name: "Mishary Rashid Alafasy",
+          nameArabic: "مشاري بن راشد العفاسي",
+          identifier: "mishary_rashid"
+        },
+        {
+          id: "abdul_basit",
+          name: "Abdul Basit Abdus Samad",
+          nameArabic: "عبد الباسط عبد الصمد",
+          identifier: "abdul_basit"
+        },
+        {
+          id: "abdulrahman_sudais",
+          name: "Abdulrahman Al-Sudais",
+          nameArabic: "عبد الرحمن السديس",
+          identifier: "abdulrahman_sudais"
+        },
+        {
+          id: "saad_al_ghamdi",
+          name: "Saad Al-Ghamdi",
+          nameArabic: "سعد الغامدي",
+          identifier: "saad_al_ghamdi"
+        },
+        {
+          id: "maher_al_muaiqly",
+          name: "Maher Al-Muaiqly",
+          nameArabic: "ماهر المعيقلي",
+          identifier: "maher_al_muaiqly"
+        }
+      ];
+    }
+
+    return dbReciters;
   }
 
   async getReciterById(id: string): Promise<Reciter | undefined> {
@@ -692,12 +731,12 @@ export class DatabaseStorage implements IStorage {
             .innerJoin(surahs, eq(ayahs.surahId, surahs.id))
             .where(inArray(ayahs.id, quranIds))
         : Promise.resolve([]),
-      
+
       // Fetch Hadiths in one query
       hadithIds.length > 0
         ? db.select().from(hadith).where(inArray(hadith.id, hadithIds))
         : Promise.resolve([]),
-      
+
       // Fetch Books in one query
       bookIds.length > 0
         ? db.select().from(books).where(inArray(books.id, bookIds))
@@ -712,7 +751,7 @@ export class DatabaseStorage implements IStorage {
     // Enrich content with details using maps (with proper type narrowing)
     const enrichedContent: EnrichedTopicContent[] = content.map(item => {
       let details: any = null;
-      
+
       if (item.contentType === 'quran') {
         const ayahData = quranMap.get(item.referenceId);
         if (ayahData) {
@@ -760,12 +799,12 @@ export class DatabaseStorage implements IStorage {
           };
         }
       }
-      
+
       // Log warning for missing references (data integrity issue)
       if (!details) {
         console.warn(`Missing ${item.contentType} reference: ${item.referenceId} for topic ${topicId}`);
       }
-      
+
       return {
         ...item,
         details

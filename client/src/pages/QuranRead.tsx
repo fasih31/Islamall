@@ -91,23 +91,31 @@ export default function QuranRead() {
       
       // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
-      if (audioUrl && selectedReciter !== "mishary_rashid") {
+      
+      if (!audioUrl) {
+        console.error("No audio URL available for this ayah");
+        setPlayingAyah(null);
+        return;
+      }
+      
+      if (selectedReciter !== "mishary_rashid") {
         const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
         // Replace the reciter code in the URL (e.g., ar.alafasy -> ar.abdulbasitmurattal)
         audioUrl = audioUrl.replace(/ar\.[a-z]+/, reciterCode);
       }
       
-      if (!audioUrl) {
-        return;
-      }
-      
+      console.log("Playing audio from:", audioUrl);
       const audio = new Audio(audioUrl);
       
       audio.onended = () => setPlayingAyah(null);
-      audio.onerror = () => setPlayingAyah(null);
+      audio.onerror = (e) => {
+        console.error("Audio playback error:", e);
+        setPlayingAyah(null);
+      };
       
       await audio.play();
     } catch (error) {
+      console.error("Failed to play audio:", error);
       setPlayingAyah(null);
     }
   };
