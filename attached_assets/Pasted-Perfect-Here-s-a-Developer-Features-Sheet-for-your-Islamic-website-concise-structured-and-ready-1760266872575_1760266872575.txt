@@ -1,0 +1,194 @@
+Perfect! Here’s a Developer Features Sheet for your Islamic website — concise, structured, and ready to hand over. You can give this to your developer, and they can check off each feature as implemented.
+
+⸻
+
+📝 IslamVerse.io – Developer Features Sheet
+
+1️⃣ Sections / Knowledge Hubs
+
+Feature	Status
+Quran & Tafsir Section	⬜
+Hadith Library Section	⬜
+Islamic Books / Library	⬜
+Islamic Finance	⬜
+Daily Life & Habits	⬜
+Politics & Governance	⬜
+Tibb-e-Nabawi / Prophetic Medicine	⬜
+Culture & Brotherhood	⬜
+Events & Community	⬜
+
+
+⸻
+
+2️⃣ Dynamic Topic Pages
+
+Feature	Status
+Topic-based navigation for each section	⬜
+Display content from Quran, Hadith, books, scholars	⬜
+Related topics suggestions	⬜
+Multi-language support (Arabic, Urdu, English, Hindi)	⬜
+
+
+⸻
+
+3️⃣ Islamic Books Section
+
+Feature	Status
+Categorized library by topic	⬜
+Read online (PDF/EPUB viewer)	⬜
+Download option	⬜
+Display book excerpts for specific topics	⬜
+Searchable by book, author, or topic	⬜
+
+
+⸻
+
+4️⃣ Quran & Tafsir Module
+
+Feature	Status
+Arabic text with translations	⬜
+Audio recitations	⬜
+Tafsir snippets from multiple scholars	⬜
+Search by Surah, Ayah, keyword, or theme	⬜
+Bookmark favorite verses	⬜
+
+
+⸻
+
+5️⃣ Hadith Module
+
+Feature	Status
+Authentic collections (Bukhari, Muslim, etc.)	⬜
+Filter by book, topic, narrator, authenticity	⬜
+Searchable by keyword	⬜
+Scholar commentary display	⬜
+
+
+⸻
+
+6️⃣ Islamic Finance
+
+Feature	Status
+Topic pages (Riba, Zakat, Halal trade, etc.)	⬜
+Calculator tools (Zakat, Nisab, profit-sharing)	⬜
+Fatwas and scholarly explanations	⬜
+AI-powered Q&A for finance topics	⬜
+
+
+⸻
+
+7️⃣ Daily Life & Habits
+
+Feature	Status
+Prayer times & Qibla direction	⬜
+Duas by category	⬜
+Sunnah reminders & habit tracker	⬜
+Islamic calendar (Hijri + Gregorian)	⬜
+Personalized daily routine suggestions	⬜
+
+
+⸻
+
+8️⃣ Politics & Governance
+
+Feature	Status
+Articles on Islamic governance and modern politics	⬜
+Timeline of events & leaders	⬜
+Scholar commentary & analysis	⬜
+Compare systems / discussion tools	⬜
+
+
+⸻
+
+9️⃣ Tibb-e-Nabawi / Prophetic Medicine
+
+Feature	Status
+Searchable remedies by ailment	⬜
+Quran/Hadith/Book references for remedies	⬜
+Scholar commentary display	⬜
+
+
+⸻
+
+🔟 Culture & Brotherhood
+
+Feature	Status
+Articles on culture, heritage, art	⬜
+Photo/video galleries	⬜
+Stories of Sahaba & Islamic heritage	⬜
+Community forum for verified discussions	⬜
+
+
+⸻
+
+1️⃣1️⃣ AI-Powered Features
+
+Feature	Status
+AI assistant answers questions from Quran, Hadith, books	⬜
+Topic-focused Q&A with references	⬜
+Suggested related topics	⬜
+AI-powered summaries of books/articles	⬜
+
+
+⸻
+
+1️⃣2️⃣ Search & Navigation
+
+Feature	Status
+Global search across Quran, Hadith, books, topics	⬜
+Autocomplete & suggestions	⬜
+Filter results by type (Quran/Hadith/Book/Article)	⬜
+Related content recommendation	⬜
+
+
+⸻
+
+1️⃣3️⃣ User Features
+
+Feature	Status
+Personal dashboard: bookmarks, saved topics, reading history	⬜
+Multi-language toggle	⬜
+Notifications for daily duas, events, or new content	⬜
+Optional user authentication	⬜
+
+
+⸻
+
+1️⃣4️⃣ Admin / CMS Features
+
+Feature	Status
+Add/update Quran, Hadith, books, articles	⬜
+Topic management (link content to topics)	⬜
+Scholar verification system	⬜
+Multi-language content management	⬜
+Analytics dashboard (popular topics/books, user engagement)	⬜
+
+
+⸻
+
+1️⃣5️⃣ Design & UX
+
+Feature	Status
+Responsive mobile-first design	⬜
+Dark/light mode	⬜
+Section color-coding	⬜
+PDF viewer embedded in-page	⬜
+Elegant Islamic-themed typography & calligraphy	⬜
+
+
+⸻
+
+1️⃣6️⃣ Optional Advanced Features
+
+Feature	Status
+AI-based content recommendation engine	⬜
+Offline book reading	⬜
+Voice assistant / TTS for Quran and books	⬜
+Blockchain-backed authenticity verification of sources	⬜
+
+
+⸻
+
+I can also turn this into a ready-to-use Excel/Google Sheet with checkboxes and filtering by section for your team — so developers can mark progress easily.
+
+Do you want me to make that next?

@@ -1,0 +1,83 @@
+Excellent question, Fasih.
+Evaluating Hadith authenticity is one of the most meticulous sciences in Islamic scholarship — known as ʿIlm al-Ḥadīth (Science of Hadith) or ʿIlm al-Jarḥ wa al-Taʿdīl (Science of Narrator Criticism and Validation).
+
+Let’s go step by step 👇
+
+⸻
+
+🕌 Core Criteria to Evaluate a Hadith
+
+Classical scholars such as Imam al-Bukhari, Imam Muslim, Imam Ibn Hajar al-‘Asqalani, and Imam al-Nawawi developed precise criteria based on five main conditions:
+
+1. Sanad (Chain of Narration) — اتصال السند
+	•	The chain of narrators must be unbroken (continuous).
+	•	Every narrator must have directly heard or received the Hadith from the one before him.
+	•	If even one link is missing, the Hadith becomes munqati‘ (disconnected) or mu‘allaq (suspended).
+
+📘 Example: Imam al-Bukhari required a clear meeting between narrators, not just living in the same time period.
+
+⸻
+
+2. ‘Adālah (Integrity) — عدالة الرواة
+	•	Each narrator must be:
+	•	A Muslim
+	•	Sane (ʿāqil)
+	•	Of good character (ʿadl)
+	•	Not known to lie or commit major sins
+	•	Not known for innovation (bid‘ah) that affects narration
+
+📘 Scholars graded narrators — trustworthy (thiqa), weak (da‘if), liar (kadhdhāb), etc.
+
+⸻
+
+3. Ḍabṭ (Accuracy and Memory) — ضبط الرواة
+	•	Narrators must have strong memory (ḥifẓ) or accurate written records.
+	•	They must transmit Hadith word-for-word without confusion or contradiction.
+	•	Ḍabṭ is checked through:
+	•	Cross-verification with other narrators
+	•	Testing narrators’ recall accuracy
+
+📘 Example: Imam al-Bukhari would test narrators with altered Hadiths to check memory precision.
+
+⸻
+
+4. ʿAdam al-Shudhūdh (No Contradiction) — عدم الشذوذ
+	•	The Hadith must not contradict stronger, more authentic Hadiths or established Qur’anic teachings.
+	•	If a reliable narrator contradicts a more reliable one, his narration is considered shādh (anomalous).
+
+📘 Example: A Hadith contradicting the Qur’an or established Sunnah would not be accepted even if the chain looks strong.
+
+⸻
+
+5. ʿAdam al-ʿIllah (No Hidden Defect) — عدم العلة
+	•	There must be no hidden flaw (ʿillah) in the chain or text.
+	•	This includes subtle issues like:
+	•	Narrator confusion between similar narrations
+	•	Wrong attribution (e.g., marfū‘ instead of mawqūf)
+	•	Errors in chronology or transmission
+
+📘 This is the most difficult condition — only top-level scholars like Ibn Hajar, Al-Daraqutni, or Al-Bukhari could detect such hidden flaws.
+
+⸻
+
+📊 Based on These, Hadith Are Classified As:
+
+Category	Description	Reliability
+Ṣaḥīḥ (Authentic)	Meets all five conditions	✅ Accepted
+Ḥasan (Good)	Slightly weaker memory but trustworthy	✅ Accepted
+Daʿīf (Weak)	Missing one or more key conditions	⚠️ Not used for rulings
+Mawḍūʿ (Fabricated)	Proven false or invented	❌ Rejected
+
+
+⸻
+
+📚 Key Classical References
+	•	Muqaddimah Ibn al-Salah – Ibn al-Salah
+	•	Nukhbat al-Fikar – Ibn Hajar al-‘Asqalani
+	•	Tadrīb al-Rāwī – Imam al-Suyuti
+	•	Al-Kifayah fi ʿIlm al-Riwayah – Al-Khatib al-Baghdadi
+
+⸻
+
+Would you like me to show you a practical example — how a specific Hadith (like “Actions are by intentions”) is evaluated under these five criteria?
+It’ll make the process very clear and concrete.

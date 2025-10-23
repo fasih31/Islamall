@@ -1,0 +1,146 @@
+Absolutely! Here’s a comprehensive features list for your Islamic website, ready to share with your developer:
+
+⸻
+
+🌐 Core Features
+
+1. Sections / Knowledge Hubs
+	•	Quran & Tafsir
+	•	Hadith Library
+	•	Islamic Books / Library
+	•	Islamic Finance
+	•	Daily Life & Habits
+	•	Politics & Governance
+	•	Tibb-e-Nabawi / Prophetic Medicine
+	•	Culture & Brotherhood
+	•	Events & Community
+
+⸻
+
+2. Dynamic Topic Pages
+	•	Topic-based navigation (e.g., Riba, Zakat, Salah, Fasting)
+	•	Display content from multiple sources: Quran, Hadith, books, scholar commentary
+	•	Related topics suggestions
+	•	Multi-language support (Arabic, Urdu, English, Hindi)
+
+⸻
+
+3. Islamic Books Section
+	•	Categorized library: Finance, Politics, Culture, Daily Life, Tibb, Youth & Motivation
+	•	Read online (PDF/EPUB viewer)
+	•	Download option for books
+	•	Display book excerpts for specific topics
+	•	Searchable by book, author, or topic
+
+⸻
+
+4. Quran & Tafsir Module
+	•	Arabic text with translations
+	•	Audio recitations
+	•	Tafsir snippets from multiple scholars
+	•	Search by Surah, Ayah, keyword, or theme
+	•	Bookmark favorite verses
+
+⸻
+
+5. Hadith Module
+	•	Authentic Hadith collections (Bukhari, Muslim, Tirmidhi, Abu Dawood, etc.)
+	•	Filter by book, topic, narrator, or authenticity (Sahih, Hasan, Daif)
+	•	Searchable by keyword
+	•	Scholar commentary display
+
+⸻
+
+6. Islamic Finance
+	•	Topic pages like Riba, Halal trade, Zakat, Islamic banking
+	•	Calculator tools: Zakat, Nisab, profit-sharing
+	•	Fatwas and scholarly explanations
+	•	AI-powered Q&A for finance topics
+
+⸻
+
+7. Daily Life & Habits
+	•	Prayer times & Qibla direction
+	•	Duas for different occasions
+	•	Sunnah reminders & habit tracker
+	•	Islamic calendar (Hijri + Gregorian)
+	•	Personalized “Daily Routine Plan”
+
+⸻
+
+8. Politics & Governance
+	•	Articles on Islamic governance, Caliphate history, modern politics
+	•	Timeline of events and leaders
+	•	Scholar commentary and analysis
+	•	Compare systems / discussion tools
+
+⸻
+
+9. Tibb-e-Nabawi (Prophetic Medicine)
+	•	Natural remedies & health advice from Hadith
+	•	Searchable by ailment
+	•	Scholar explanations and references
+
+⸻
+
+10. Culture & Brotherhood
+	•	Articles on Islamic culture, history, and art
+	•	Photo/video galleries
+	•	Stories of the Sahaba and Islamic heritage
+	•	Community forum for verified discussions
+
+⸻
+
+11. AI-Powered Features
+	•	Ask-Islam assistant (answers questions based on internal database)
+	•	Topic-focused Q&A with references (Quran, Hadith, books)
+	•	Suggested related topics
+	•	AI-powered summaries of books/articles
+
+⸻
+
+12. Search & Navigation
+	•	Global search across Quran, Hadith, books, and topics
+	•	Autocomplete & suggestions
+	•	Filter results by type (Quran, Hadith, Book, Article)
+	•	Related content recommendation
+
+⸻
+
+13. User Features
+	•	Personal dashboard: bookmarks, saved topics, reading history
+	•	Multi-language toggle
+	•	Notifications for daily duas, events, or new content
+	•	Optional authentication (user accounts for personalization)
+
+⸻
+
+14. Admin / CMS Features
+	•	Add/update Quran, Hadith, books, articles
+	•	Topic management (link content to topics)
+	•	Scholar verification system
+	•	Multi-language content management
+	•	Analytics dashboard (most read topics, popular books, user engagement)
+
+⸻
+
+15. Design & UX
+	•	Responsive mobile-first design
+	•	Dark/light mode for reading comfort
+	•	Section color-coding for clarity
+	•	PDF viewer embedded in-page
+	•	Elegant Islamic-themed typography and calligraphy
+
+⸻
+
+16. Optional Advanced Features
+	•	AI-based content recommendation engine
+	•	Offline book reading
+	•	Voice assistant / TTS for Quran and books
+	•	Blockchain-backed authenticity verification of sources
+
+⸻
+
+If you want, I can now convert this into a concise “Developer Features Sheet” ready to hand over — with checkboxes for each feature for tracking implementation.
+
+Do you want me to do that next?

@@ -1,0 +1,108 @@
+Perfect — here’s a developer-friendly task brief version of what you described. It’s written clearly, structured, and action-oriented so your developer can understand exactly what needs to be done:
+
+⸻
+
+🕌 ISLAMIC WEBSITE FUNCTIONAL & TECHNICAL TASK BRIEF
+
+🎯 Objective
+
+Create an intelligent, user-personalized Islamic knowledge platform that:
+	•	Provides dynamic recommendations (Duas, Hadith, Quranic verses) based on user behavior and emotional state (e.g., stress, sickness, sadness, etc.)
+	•	Offers categorized, searchable Islamic resources (Hadith books, Duas, Ruqyah, etc.)
+	•	Supports audio playback, filters, and personalized experiences based on user consent.
+
+⸻
+
+🧠 Core Features
+
+1. User Behavior–Based Recommendation System
+	•	Analyze YouTube or browsing history (only if user explicitly consents).
+	•	Based on detected emotion or topic (e.g., stress, sickness, sadness, happiness, death, exams, etc.), recommend:
+	•	Relevant Duas
+	•	Quranic verses (with translation)
+	•	Hadiths related to that situation
+	•	Example:
+	•	If the user watches “overthinking/stress relief” videos → Show Duas for stress relief, Ayahs on Sabr (patience), Hadiths on calmness.
+	•	If “sickness” videos → Duas for Shifa, verses on healing, Hadiths about illness.
+
+⸻
+
+2. User Consent
+	•	Before accessing browsing/YouTube history, display a consent popup:
+“Would you like to receive personalized Islamic recommendations based on your browsing activity? We’ll only use this for religious content suggestions.”
+	•	Allow “Accept” or “Decline”.
+	•	If declined → show general recommendations.
+
+⸻
+
+3. Dynamic Hadith Library
+	•	All Hadith Books (e.g., Sahih Bukhari, Muslim, Tirmidhi, Abu Dawood, etc.)
+	•	Each book should have:
+	•	Chapters → Subtopics → Individual Hadiths
+	•	Search filter (book name, topic, narrator, keywords)
+	•	Language options: Urdu, Hindi, English
+	•	Audio playback (for multiple scholars)
+	•	Fix issue: currently, only two scholars’ audios work, others show names but no audio — this must be tested and fixed.
+
+⸻
+
+4. Dua & Ruqyah Section
+	•	Create dedicated sections:
+	•	Daily Duas (Morning / Evening)
+	•	Weekly / Monthly Duas
+	•	Occasional Duas (Ramadan, Hajj, Exams, Illness, etc.)
+	•	Dua-e-Manzil
+	•	Ruqyah Shariah
+	•	Include Arabic text + Translation + Audio.
+	•	Add category filters for easy browsing.
+
+⸻
+
+5. Enriched Topic Pages
+
+Each Islamic topic (e.g., Riba, Patience, Charity, Prayer) should include:
+	•	Related Quran verses
+	•	Related Hadiths
+	•	Related Scholars’ explanations or lectures
+	•	Related Duas
+	•	Subtopics for in-depth navigation
+	•	Dynamic filtering by:
+	•	Source (Quran / Hadith / Scholar)
+	•	Language
+	•	Topic type (Fiqh, Aqeedah, History, etc.)
+
+⸻
+
+6. Testing & Final Validation
+	•	Test all audio links and ensure every scholar’s clip loads correctly.
+	•	Validate search filters and dynamic content loading.
+	•	Confirm consent flow works as intended.
+	•	Confirm all dynamic recommendations appear properly after consent.
+
+⸻
+
+🛠️ Technical Notes
+	•	Use a central database to store all Quran, Hadith, and Dua data.
+	•	Ensure search and filters are dynamic (e.g., by book, topic, keyword, scholar).
+	•	Support multi-language translations (Urdu, English, Hindi).
+	•	Use AI-based tagging or keyword extraction for recommendation mapping.
+	•	All user data/browsing info must remain private and local or anonymized.
+
+⸻
+
+✅ Task List Summary
+
+#	Task	Status
+1	Implement consent-based browsing recommendation	⏳ Pending
+2	Build dynamic Hadith library with chapter filtering	⏳ Pending
+3	Fix missing scholar audios	⏳ Pending
+4	Create Dua, Ruqyah, and Manzil pages	⏳ Pending
+5	Add daily/weekly/morning/evening/occasional dua filters	⏳ Pending
+6	Enrich topic pages (Riba, Sabr, etc.) with Quran, Hadith, Duas	⏳ Pending
+7	Add AI-based recommendation logic	⏳ Pending
+8	Full system testing (audio, filters, consent flow)	⏳ Pending
+
+
+⸻
+
+Would you like me to also prepare a developer architecture document (showing database structure, API design, and front-end flow** for this)? That would make it easier for your devs to implement it correctly.
