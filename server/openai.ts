@@ -4,11 +4,22 @@ import fs from "fs";
 import path from "path";
 
 // the newest OpenAI model is "gpt-5" which was released August 7, 2025. do not change this unless explicitly requested by the user
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+let openai: OpenAI | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OpenAI API key is not configured. Please set OPENAI_API_KEY environment variable.");
+  }
+  if (!openai) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  }
+  return openai;
+}
 
 // Arabic Text-to-Speech with high-quality Arabic voice
 export async function generateArabicSpeech(text: string): Promise<Buffer> {
-  const mp3 = await openai.audio.speech.create({
+  const client = getOpenAI();
+  const mp3 = await client.audio.speech.create({
     model: "tts-1-hd",
     voice: "nova", // Nova has excellent Arabic pronunciation
     input: text,
@@ -25,7 +36,8 @@ export async function extractTextFromImage(base64Image: string): Promise<{
   englishText: string;
   fullText: string;
 }> {
-  const response = await openai.chat.completions.create({
+  const client = getOpenAI();
+  const response = await client.chat.completions.create({
     model: "gpt-5",
     messages: [
       {
@@ -100,7 +112,8 @@ Provide:
 Return in JSON format with: classification, analysis, and criteria object with sanad, adalah, dabt, shudhudh, illah (each with score and notes).
 `;
 
-  const response = await openai.chat.completions.create({
+  const client = getOpenAI();
+  const response = await client.chat.completions.create({
     model: "gpt-5",
     messages: [
       {
@@ -133,7 +146,8 @@ Return in JSON format with: classification, analysis, and criteria object with s
 
 // Analyze Quranic verse for deeper understanding
 export async function analyzeQuranicVerse(arabicText: string, translation: string): Promise<string> {
-  const response = await openai.chat.completions.create({
+  const client = getOpenAI();
+  const response = await client.chat.completions.create({
     model: "gpt-5",
     messages: [
       {
