@@ -1,7 +1,6 @@
 
-import { db } from "@db";
-import { surahs, ayahs, hadith, hadithBooks, hadithChapters, reciters, duas, islamicKnowledge } from "@shared/schema";
-import { eq } from "drizzle-orm";
+import { db } from "./db";
+import { surahs, ayahs, hadith } from "@shared/schema";
 
 // Minimal authentic Quran data (first 3 surahs for quick testing)
 const QURAN_DATA = [
@@ -26,7 +25,7 @@ const QURAN_DATA = [
     name: "Al-Baqarah",
     nameArabic: "البقرة",
     revelationPlace: "Madinah",
-    totalAyahs: 10, // Shortened for fast seed
+    totalAyahs: 10,
     ayahs: [
       { text: "الم", translation: "Alif, Lam, Meem." },
       { text: "ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ", translation: "This is the Book about which there is no doubt, a guidance for those conscious of Allah." },
@@ -55,41 +54,85 @@ const QURAN_DATA = [
   }
 ];
 
+// Minimal authentic Hadith data
+const HADITH_DATA = [
+  {
+    book: "Sahih al-Bukhari",
+    chapter: "Book of Faith",
+    textArabic: "إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ",
+    translationEn: "Actions are according to intentions, and everyone will get what was intended.",
+    grade: "Sahih" as const,
+    narrator: "Umar ibn al-Khattab",
+  },
+  {
+    book: "Sahih Muslim",
+    chapter: "Book of Faith",
+    textArabic: "الإِيمَانُ بِضْعٌ وَسَبْعُونَ شُعْبَةً",
+    translationEn: "Faith has over seventy branches, the best of which is saying 'There is no god but Allah,' and the least of which is removing harmful objects from the road.",
+    grade: "Sahih" as const,
+    narrator: "Abu Huraira",
+  },
+  {
+    book: "Sahih al-Bukhari",
+    chapter: "Book of Knowledge",
+    textArabic: "مَنْ يُرِدِ اللَّهُ بِهِ خَيْرًا يُفَقِّهْهُ فِي الدِّينِ",
+    translationEn: "If Allah wants good for someone, He gives them understanding of the religion.",
+    grade: "Sahih" as const,
+    narrator: "Muawiyah",
+  }
+];
+
 async function fastSeed() {
   console.log("🌱 Starting fast seed...");
 
-  // Clear existing data
-  await db.delete(ayahs);
-  await db.delete(surahs);
-  console.log("✅ Cleared existing Quran data");
+  try {
+    // Clear existing data
+    console.log("🗑️  Clearing existing Quran data...");
+    await db.delete(ayahs);
+    await db.delete(surahs);
+    console.log("✅ Cleared existing Quran data");
 
-  // Insert Surahs and Ayahs with audio URLs
-  for (const surahData of QURAN_DATA) {
-    await db.insert(surahs).values({
-      id: surahData.id,
-      name: surahData.name,
-      nameArabic: surahData.nameArabic,
-      revelationPlace: surahData.revelationPlace,
-      totalAyahs: surahData.totalAyahs,
-    });
-
-    for (let i = 0; i < surahData.ayahs.length; i++) {
-      const ayahData = surahData.ayahs[i];
-      const paddedSurah = String(surahData.id).padStart(3, '0');
-      const paddedAyah = String(i + 1).padStart(3, '0');
-      
-      await db.insert(ayahs).values({
-        surahId: surahData.id,
-        ayahNumber: i + 1,
-        textArabic: ayahData.text,
-        translationEn: ayahData.translation,
-        audioUrl: `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`,
+    // Insert Surahs and Ayahs with audio URLs
+    for (const surahData of QURAN_DATA) {
+      await db.insert(surahs).values({
+        id: surahData.id,
+        name: surahData.name,
+        nameArabic: surahData.nameArabic,
+        revelationPlace: surahData.revelationPlace,
+        totalAyahs: surahData.totalAyahs,
       });
-    }
-    console.log(`✅ Inserted Surah ${surahData.name} with ${surahData.ayahs.length} ayahs`);
-  }
 
-  console.log("✅ Fast seed completed successfully!");
+      for (let i = 0; i < surahData.ayahs.length; i++) {
+        const ayahData = surahData.ayahs[i];
+        const paddedSurah = String(surahData.id).padStart(3, '0');
+        const paddedAyah = String(i + 1).padStart(3, '0');
+        
+        await db.insert(ayahs).values({
+          surahId: surahData.id,
+          ayahNumber: i + 1,
+          textArabic: ayahData.text,
+          translationEn: ayahData.translation,
+          audioUrl: `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`,
+        });
+      }
+      console.log(`✅ Inserted Surah ${surahData.name} with ${surahData.ayahs.length} ayahs`);
+    }
+
+    // Clear and insert Hadith data
+    console.log("🗑️  Clearing existing Hadith data...");
+    await db.delete(hadith);
+    console.log("✅ Cleared existing Hadith data");
+
+    for (const hadithData of HADITH_DATA) {
+      await db.insert(hadith).values(hadithData);
+    }
+    console.log(`✅ Inserted ${HADITH_DATA.length} hadiths`);
+
+    console.log("✅ Fast seed completed successfully!");
+  } catch (error) {
+    console.error("❌ Seed failed:", error);
+    throw error;
+  }
 }
 
 fastSeed()
