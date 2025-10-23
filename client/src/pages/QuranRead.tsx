@@ -63,6 +63,7 @@ export default function QuranRead() {
   const [selectedTranslator, setSelectedTranslator] = useState<string>("sahih_int");
   const [selectedReciter, setSelectedReciter] = useState<string>("mishary_rashid");
   const [playingAyah, setPlayingAyah] = useState<string | null>(null);
+  const [loadingAudio, setLoadingAudio] = useState<string | null>(null);
 
   const { data: surah, isLoading: surahLoading } = useQuery<Surah>({
     queryKey: ["/api/quran/surah", surahId],
@@ -87,35 +88,41 @@ export default function QuranRead() {
 
   const handlePlayAudio = async (ayah: Ayah) => {
     try {
-      setPlayingAyah(ayah.id);
+      setLoadingAudio(ayah.id);
       
-      // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
       
+      // Fallback: Generate audio URL if missing
       if (!audioUrl || audioUrl.trim() === '') {
-        console.error("No audio URL available for this ayah");
-        setPlayingAyah(null);
-        return;
+        const paddedSurah = String(ayah.surahId).padStart(3, '0');
+        const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
+        audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
       }
       
       if (selectedReciter !== "mishary_rashid") {
         const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
-        // Replace the reciter code in the URL (e.g., ar.alafasy -> ar.abdulbasitmurattal)
-        audioUrl = audioUrl.replace(/ar\.[a-z]+/, reciterCode);
+        audioUrl = audioUrl.replace(/(Alafasy|ar\.[a-z]+)/, reciterCode.replace('ar.', ''));
       }
       
-      console.log("Playing audio from:", audioUrl);
       const audio = new Audio(audioUrl);
+      audio.preload = "auto";
+      
+      audio.oncanplaythrough = () => {
+        setLoadingAudio(null);
+        setPlayingAyah(ayah.id);
+      };
       
       audio.onended = () => setPlayingAyah(null);
       audio.onerror = (e) => {
         console.error("Audio playback error:", e);
+        setLoadingAudio(null);
         setPlayingAyah(null);
       };
       
       await audio.play();
     } catch (error) {
       console.error("Failed to play audio:", error);
+      setLoadingAudio(null);
       setPlayingAyah(null);
     }
   };
@@ -264,13 +271,23 @@ export default function QuranRead() {
                         size="sm"
                         variant="ghost"
                         onClick={() => handlePlayAudio(ayah)}
+                        disabled={loadingAudio === ayah.id}
                         className="opacity-0 group-hover:opacity-100 transition-opacity h-7"
                         data-testid={`button-play-${ayah.ayahNumber}`}
                       >
-                        <Volume2 className={`h-3 w-3 mr-1 ${playingAyah === ayah.id ? 'text-primary' : ''}`} />
-                        <span className="text-xs">
-                          {playingAyah === ayah.id ? 'Playing...' : 'Listen'}
-                        </span>
+                        {loadingAudio === ayah.id ? (
+                          <>
+                            <div className="h-3 w-3 mr-1 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                            <span className="text-xs">Loading...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className={`h-3 w-3 mr-1 ${playingAyah === ayah.id ? 'text-primary' : ''}`} />
+                            <span className="text-xs">
+                              {playingAyah === ayah.id ? 'Playing...' : 'Listen'}
+                            </span>
+                          </>
+                        )}
                       </Button>
                     </div>
                   </div>

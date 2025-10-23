@@ -4,9 +4,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { MessageCircle, X, Send, Bot, User, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send, Bot, User, Loader2, MessageSquare } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Message {
   role: "user" | "assistant";
@@ -22,7 +28,7 @@ export function IslamicChatbot({ type }: IslamicChatbotProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: type === "quran" 
+      content: type === "quran"
         ? "Peace be upon you! I'm here to help you explore the Holy Quran. You can ask me about any verse, topic, or concept from the Quran."
         : "Peace be upon you! I'm here to help you learn from the authentic Hadith. Ask me about the teachings and sayings of Prophet Muhammad ﷺ.",
     },
@@ -35,6 +41,20 @@ export function IslamicChatbot({ type }: IslamicChatbotProps) {
     mutationFn: async (message: string) => {
       const endpoint = type === "quran" ? "/api/quran/chat" : "/api/hadith/chat";
       const response = await apiRequest("POST", endpoint, { question: message });
+      if (!response.ok) {
+        let errorMessage = "Failed to get response. Please try again.";
+        if (response.status === 503) {
+          errorMessage = "AI chatbot service temporarily unavailable. The feature requires OpenAI credits to function.";
+        } else {
+          try {
+            const errorData = await response.json();
+            errorMessage = errorData.error || errorMessage;
+          } catch (e) {
+            // Ignore if parsing JSON fails
+          }
+        }
+        throw new Error(errorMessage);
+      }
       return await response.json();
     },
     onSuccess: (data) => {
@@ -43,13 +63,16 @@ export function IslamicChatbot({ type }: IslamicChatbotProps) {
           ...prev,
           { role: "assistant", content: data.response },
         ]);
+      } else {
+        toast({
+          title: "No Response",
+          description: "The chatbot did not provide a valid response. Please try rephrasing your question.",
+          variant: "destructive",
+        });
       }
     },
     onError: (error: any) => {
-      const message = error?.message?.includes("503")
-        ? "AI chatbot service temporarily unavailable. The feature requires OpenAI credits to function."
-        : "Failed to get response. Please try again.";
-      
+      const message = error?.message || "An unexpected error occurred.";
       toast({
         title: "Chatbot Error",
         description: message,
@@ -95,23 +118,17 @@ export function IslamicChatbot({ type }: IslamicChatbotProps) {
       )}
 
       {/* Chat Interface */}
-      {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[600px] shadow-xl z-50 flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Bot className="h-5 w-5" />
-              {type === "quran" ? "Quran Assistant" : "Hadith Assistant"}
-            </CardTitle>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={() => setIsOpen(false)}
-              data-testid={`button-close-${type}-chatbot`}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5" />
+              Islamic Knowledge Assistant
+            </DialogTitle>
+            <p className="text-sm text-muted-foreground">
+              Ask questions about {type === 'quran' ? 'Quran verses' : 'Hadith collections'} and receive authentic Islamic knowledge
+            </p>
+          </DialogHeader>
           <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
             {/* Messages */}
             <ScrollArea className="flex-1 px-4" ref={scrollRef}>
@@ -181,8 +198,8 @@ export function IslamicChatbot({ type }: IslamicChatbotProps) {
               </div>
             </div>
           </CardContent>
-        </Card>
-      )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

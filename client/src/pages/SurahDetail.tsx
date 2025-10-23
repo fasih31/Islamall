@@ -76,6 +76,8 @@ export default function SurahDetail() {
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
   const [playingAyah, setPlayingAyah] = useState<string | null>(null);
+  const [loadingAudio, setLoadingAudio] = useState<string | null>(null);
+  const [audioError, setAudioError] = useState<string | null>(null);
   const [selectedTranslator, setSelectedTranslator] = useState<string>("sahih_int");
   const [selectedReciter, setSelectedReciter] = useState<string>("mishary_rashid");
 
@@ -102,41 +104,48 @@ export default function SurahDetail() {
 
   const handlePlayAudio = async (ayah: Ayah) => {
     try {
-      setPlayingAyah(ayah.id);
+      setLoadingAudio(ayah.id);
+      setAudioError(null);
+      setPlayingAyah(null);
       
-      // Extract global verse number from existing audio URL and replace reciter
       let audioUrl = ayah.audioUrl;
       
+      // Fallback: Generate audio URL if missing
       if (!audioUrl || audioUrl.trim() === '') {
-        console.error("No audio URL for ayah:", ayah.id);
-        toast({
-          title: "Audio Unavailable",
-          description: "Audio recitation is being loaded. Please try again in a moment.",
-          variant: "destructive",
-        });
-        setPlayingAyah(null);
-        return;
+        const paddedSurah = String(ayah.surahId).padStart(3, '0');
+        const paddedAyah = String(ayah.ayahNumber).padStart(3, '0');
+        audioUrl = `https://everyayah.com/data/Alafasy_128kbps/${paddedSurah}${paddedAyah}.mp3`;
       }
       
+      // Replace reciter if not default
       if (selectedReciter !== "mishary_rashid") {
         const reciterCode = RECITER_AUDIO_MAP[selectedReciter] || "ar.alafasy";
-        // Replace the reciter code in the URL (e.g., ar.alafasy -> ar.abdulbasitmurattal)
-        audioUrl = audioUrl.replace(/ar\.[a-z]+/, reciterCode);
+        audioUrl = audioUrl.replace(/(Alafasy|ar\.[a-z]+)/, reciterCode.replace('ar.', ''));
       }
       
-      console.log("Playing audio from:", audioUrl);
       const audio = new Audio(audioUrl);
+      
+      // Preload audio
+      audio.preload = "auto";
+      
+      audio.oncanplaythrough = () => {
+        setLoadingAudio(null);
+        setPlayingAyah(ayah.id);
+      };
       
       audio.onended = () => {
         setPlayingAyah(null);
       };
       
       audio.onerror = (e) => {
-        console.error("Audio error:", e);
+        console.error("Audio error for", audioUrl, e);
+        setLoadingAudio(null);
         setPlayingAyah(null);
+        setAudioError(ayah.id);
+        
         toast({
-          title: "Playback Error",
-          description: "Failed to play audio. Please try again.",
+          title: "Audio Unavailable",
+          description: "Unable to load recitation. The audio file may not be available.",
           variant: "destructive",
         });
       };
@@ -146,14 +155,17 @@ export default function SurahDetail() {
       const reciterName = reciters?.find(r => r.identifier === selectedReciter)?.name || "Mishary Rashid Alafasy";
       toast({
         title: "Playing Recitation",
-        description: `Authentic recitation by ${reciterName}`,
+        description: `By ${reciterName}`,
       });
     } catch (error) {
       console.error("Audio playback error:", error);
+      setLoadingAudio(null);
       setPlayingAyah(null);
+      setAudioError(ayah.id);
+      
       toast({
-        title: "Audio Error",
-        description: "Failed to play audio. Please try again.",
+        title: "Playback Error",
+        description: "Failed to play audio. Please check your connection.",
         variant: "destructive",
       });
     }
@@ -334,11 +346,15 @@ export default function SurahDetail() {
                         size="icon"
                         variant="ghost"
                         onClick={() => handlePlayAudio(ayah)}
-                        disabled={playingAyah === ayah.id}
+                        disabled={playingAyah === ayah.id || loadingAudio === ayah.id}
                         data-testid={`button-play-${ayah.ayahNumber}`}
                         className={playingAyah === ayah.id ? "animate-pulse-subtle" : ""}
                       >
-                        <Volume2 className={`h-4 w-4 ${playingAyah === ayah.id ? 'text-primary' : ''}`} />
+                        {loadingAudio === ayah.id ? (
+                          <div className="h-4 w-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <Volume2 className={`h-4 w-4 ${playingAyah === ayah.id ? 'text-primary' : audioError === ayah.id ? 'text-destructive' : ''}`} />
+                        )}
                       </Button>
                     </div>
                   </div>

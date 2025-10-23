@@ -72,7 +72,7 @@ async function fastSeedQuran() {
           ayahNumber: arabicAyah.numberInSurah,
           textArabic: arabicAyah.text,
           translationEn: englishAyah.text,
-          audioUrl: null,
+          audioUrl: `https://everyayah.com/data/Alafasy_128kbps/${String(arabicSurah.number).padStart(3, '0')}${String(arabicAyah.numberInSurah).padStart(3, '0')}.mp3`,
         });
 
         // We'll need to get the inserted IDs later for translations
@@ -83,17 +83,17 @@ async function fastSeedQuran() {
     // Insert ayahs in batches
     console.log(`🚀 Inserting ${ayahBatch.length} ayahs in batches...`);
     let insertedCount = 0;
-    
+
     for (let i = 0; i < ayahBatch.length; i += BATCH_SIZE) {
       const batch = ayahBatch.slice(i, i + BATCH_SIZE);
       const inserted = await db.insert(ayahs).values(batch).returning();
-      
+
       // Map inserted IDs
       inserted.forEach((ayah: any) => {
         const key = `${ayah.surahId}-${ayah.ayahNumber}`;
         ayahIdMap.set(key, ayah.id);
       });
-      
+
       insertedCount += batch.length;
       if (insertedCount % 500 === 0) {
         console.log(`  Progress: ${insertedCount}/${ayahBatch.length} ayahs inserted...`);
@@ -145,7 +145,7 @@ async function fastSeedQuran() {
     // Insert translations in batches
     console.log(`🚀 Inserting ${translationBatch.length} translations in batches...`);
     insertedCount = 0;
-    
+
     for (let i = 0; i < translationBatch.length; i += BATCH_SIZE) {
       const batch = translationBatch.slice(i, i + BATCH_SIZE);
       await db.insert(ayahTranslations).values(batch);
