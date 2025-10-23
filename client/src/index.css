@@ -250,6 +250,126 @@
     @apply hidden;
   }
 
+  /* Islamic Geometric Pattern Background */
+  .islamic-pattern-bg {
+    background-image: 
+      repeating-linear-gradient(45deg, transparent, transparent 35px, hsl(var(--primary) / 0.03) 35px, hsl(var(--primary) / 0.03) 70px),
+      repeating-linear-gradient(-45deg, transparent, transparent 35px, hsl(var(--primary) / 0.03) 35px, hsl(var(--primary) / 0.03) 70px);
+  }
+
+  /* Subtle Islamic Pattern Overlay */
+  .islamic-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, hsl(var(--primary) / 0.05) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, hsl(var(--primary) / 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+  }
+
+  /* Arabic Text Enhancement */
+  .arabic-enhanced {
+    font-feature-settings: 'liga' 1, 'calt' 1, 'dlig' 1;
+    text-rendering: optimizeLegibility;
+    letter-spacing: 0.02em;
+  }
+
+  /* Smooth Fade In Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* Pulse Animation for Active Elements */
+  @keyframes pulse-subtle {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Glow Effect for Primary Elements */
+  .glow-primary {
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.3);
+  }
+
+  .glow-primary-hover:hover {
+    box-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+    transition: box-shadow 0.3s ease;
+  }
+
+  /* Card Elevation on Hover */
+  .card-elevate {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card-elevate:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px hsl(var(--foreground) / 0.1);
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary) / 0.7));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Divider with Islamic Pattern */
+  .islamic-divider {
+    position: relative;
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .islamic-divider::before,
+  .islamic-divider::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--border)), transparent);
+  }
+
+  .islamic-divider::before {
+    left: 0;
+  }
+
+  .islamic-divider::after {
+    right: 0;
+  }
+
+  /* Smooth Scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Focus Visible Ring Enhancement */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
   /* Placeholder styling for contentEditable div */
   [contenteditable][data-placeholder]:empty::before {
     content: attr(data-placeholder);

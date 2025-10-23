@@ -201,11 +201,11 @@ export default function SurahDetail() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background islamic-pattern-bg">
       <Header />
 
       <main className="flex-1 container py-6 md:py-12 px-4 md:px-6">
-        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8">
+        <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 animate-fade-in-up">
           {/* Navigation */}
           <div className="flex items-center justify-between flex-wrap gap-3">
             <Button
@@ -229,13 +229,13 @@ export default function SurahDetail() {
           </div>
 
           {/* Surah Header */}
-          <Card>
-            <CardContent className="pt-6 space-y-6">
+          <Card className="overflow-hidden relative islamic-overlay">
+            <CardContent className="pt-6 space-y-6 relative z-10">
               <div className="text-center space-y-4">
-                <h1 className="font-serif text-3xl md:text-4xl font-bold">
+                <h1 className="font-serif text-3xl md:text-4xl font-bold gradient-text">
                   {surah.name}
                 </h1>
-                <p className="font-arabic text-4xl md:text-5xl text-primary">
+                <p className="font-arabic text-4xl md:text-5xl text-primary arabic-enhanced">
                   {surah.nameArabic}
                 </p>
                 <div className="flex items-center justify-center gap-4">
@@ -317,11 +317,16 @@ export default function SurahDetail() {
 
           {/* Ayahs List */}
           <div className="space-y-6">
-            {ayahs.map((ayah) => (
-              <Card key={ayah.id} data-testid={`card-ayah-${ayah.ayahNumber}`}>
+            {ayahs.map((ayah, index) => (
+              <Card 
+                key={ayah.id} 
+                data-testid={`card-ayah-${ayah.ayahNumber}`}
+                className="card-elevate hover:border-primary/30 transition-all duration-300 animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.05}s` }}
+              >
                 <CardContent className="pt-6 space-y-4">
                   <div className="flex items-start justify-between gap-4">
-                    <Badge variant="outline" className="flex-shrink-0">
+                    <Badge variant="outline" className="flex-shrink-0 font-semibold glow-primary-hover">
                       {ayah.ayahNumber}
                     </Badge>
                     <div className="flex gap-2">
@@ -331,14 +336,15 @@ export default function SurahDetail() {
                         onClick={() => handlePlayAudio(ayah)}
                         disabled={playingAyah === ayah.id}
                         data-testid={`button-play-${ayah.ayahNumber}`}
+                        className={playingAyah === ayah.id ? "animate-pulse-subtle" : ""}
                       >
-                        <Volume2 className="h-4 w-4" />
+                        <Volume2 className={`h-4 w-4 ${playingAyah === ayah.id ? 'text-primary' : ''}`} />
                       </Button>
                     </div>
                   </div>
 
                   <p
-                    className="font-arabic text-2xl md:text-3xl leading-loose text-right"
+                    className="font-arabic text-2xl md:text-3xl leading-loose text-right arabic-enhanced"
                     dir="rtl"
                   >
                     {ayah.textArabic}

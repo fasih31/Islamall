@@ -3,7 +3,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { db } from "@db";
-import { ayahs, surahs, hadith, hadithBooks, hadithChapters } from "@shared/schema";
+import { ayahs, surahs, hadith, hadithBooks, hadithChapters, reciterTable } from "@shared/schema";
 import { eq, sql } from "drizzle-orm";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import { generateArabicSpeech, extractTextFromImage, saveAudioFile, analyzeQuranicVerse, validateHadith } from "./openai";
@@ -29,7 +29,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== QURAN API ==============
-  
+
   // Get all surahs
   app.get("/api/quran/surahs", async (req, res) => {
     try {
@@ -61,12 +61,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const surahId = parseInt(req.params.id);
       const ayahs = await storage.getAyahsBySurah(surahId);
-      
+
       // Check if first ayah has audio URL for debugging
       if (ayahs.length > 0) {
         console.log("First ayah audio URL:", ayahs[0].audioUrl ? "Present" : "Missing");
       }
-      
+
       res.json(ayahs);
     } catch (error) {
       console.error("Error fetching ayahs:", error);
@@ -98,22 +98,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .from(ayahs)
         .orderBy(sql`RANDOM()`)
         .limit(1);
-      
+
       if (!randomAyahResult || randomAyahResult.length === 0) {
         return res.json(null);
       }
-      
+
       const ayah = randomAyahResult[0];
-      
+
       // Get surah info
       const surahResult = await db
         .select()
         .from(surahs)
         .where(eq(surahs.id, ayah.surahId))
         .limit(1);
-      
+
       const surah = surahResult[0];
-      
+
       res.json({
         id: ayah.id,
         surahId: ayah.surahId,
@@ -255,7 +255,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .where(eq(hadith.grade, "Sahih"))
         .orderBy(sql`RANDOM()`)
         .limit(1);
-      
+
       res.json(randomHadith[0] || null);
     } catch (error) {
       console.error("Error fetching random hadith:", error);
@@ -309,7 +309,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch hadith" });
     }
   });
-  
+
   // Get hadith chapters for a book
   app.get("/api/hadith/chapters/:book", async (req, res) => {
     try {
@@ -437,11 +437,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== RECITERS API ==============
-  
-  // Get all reciters
+
+  // Reciters endpoint with default data if database is empty
   app.get("/api/reciters", async (req, res) => {
     try {
-      const reciters = await storage.getAllReciters();
+      let reciters = await db.select().from(reciterTable);
+
+      // If no reciters in database, return default authentic reciters
+      if (!reciters || reciters.length === 0) {
+        reciters = [
+          {
+            id: "1",
+            name: "Mishary Rashid Alafasy",
+            nameArabic: "مشاري بن راشد العفاسي",
+            identifier: "mishary_rashid",
+            bio: "Renowned Kuwaiti Qari and Imam of Masjid al-Kabir"
+          },
+          {
+            id: "2",
+            name: "Abdul Basit Abdul Samad",
+            nameArabic: "عبد الباسط عبد الصمد",
+            identifier: "abdul_basit",
+            bio: "Egyptian Qari known for his Mujawwad recitation"
+          },
+          {
+            id: "3",
+            name: "Abdulrahman As-Sudais",
+            nameArabic: "عبد الرحمن السديس",
+            identifier: "abdulrahman_sudais",
+            bio: "Imam of Masjid al-Haram in Makkah"
+          },
+          {
+            id: "4",
+            name: "Saad Al-Ghamdi",
+            nameArabic: "سعد الغامدي",
+            identifier: "saad_al_ghamdi",
+            bio: "Saudi Qari and Imam in Taraweeh prayers"
+          },
+          {
+            id: "5",
+            name: "Maher Al-Muaiqly",
+            nameArabic: "ماهر المعيقلي",
+            identifier: "maher_al_muaiqly",
+            bio: "Imam of Masjid al-Haram in Makkah"
+          }
+        ];
+      }
+
       res.json(reciters);
     } catch (error) {
       console.error("Error fetching reciters:", error);
@@ -508,14 +550,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Call Aladhan API for accurate prayer times
       const today = new Date();
       const timestamp = Math.floor(today.getTime() / 1000);
-      
+
       const aladhanUrl = `https://api.aladhan.com/v1/timings/${timestamp}?latitude=${lat}&longitude=${lon}&method=2`;
-      
+
       const aladhanResponse = await fetch(aladhanUrl);
       if (!aladhanResponse.ok) {
         throw new Error("Failed to fetch from Aladhan API");
       }
-      
+
       const aladhanData = await aladhanResponse.json();
       const timings = aladhanData.data.timings;
 
@@ -540,7 +582,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/finance/zakat", async (req, res) => {
     try {
       const { cash, gold, silver, investments } = req.body;
-      
+
       const total = 
         parseFloat(cash || 0) +
         parseFloat(gold || 0) +
@@ -656,7 +698,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check if user already has RSVP
       const existingRsvp = await storage.getUserEventRsvp(eventId, userId);
-      
+
       if (existingRsvp) {
         // Update existing RSVP
         const updated = await storage.updateEventRsvp(existingRsvp.id, status);
@@ -708,7 +750,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/duas", async (req, res) => {
     try {
       const category = req.query.category as string | undefined;
-      
+
       const duas = category 
         ? await storage.getDuasByCategory(category)
         : await storage.getAllDuas();
@@ -732,18 +774,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== GLOBAL SEARCH API ==============
-  
+
   // Global search across all content
   app.get("/api/search", async (req, res) => {
     try {
       const query = req.query.q as string;
       const type = req.query.type as string | undefined;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
-      
+
       if (!query || query.trim().length < 2) {
         return res.json({ quran: [], hadith: [], books: [], topics: [], duas: [] });
       }
-      
+
       const results = await storage.globalSearch(query, { type, limit });
       res.json(results);
     } catch (error) {
@@ -753,12 +795,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== RECOMMENDATION API ==============
-  
+
   // Get scenario-based recommendations
   app.get("/api/recommendations/scenario", async (req, res) => {
     try {
       const scenario = req.query.scenario as string;
-      
+
       // Map scenarios to relevant content
       const scenarioMap: Record<string, { duaCategory: string; keywords: string[] }> = {
         stress: { duaCategory: "protection", keywords: ["patience", "sabr", "peace", "tranquility"] },
@@ -768,16 +810,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         difficulty: { duaCategory: "prayer", keywords: ["patience", "hardship", "trial", "sabr"] },
         seeking_guidance: { duaCategory: "prayer", keywords: ["guidance", "istikhara", "wisdom", "decision"] }
       };
-      
+
       const mapping = scenarioMap[scenario];
       if (!mapping) {
         return res.json({ duas: [], verses: [], hadiths: [] });
       }
-      
+
       const duas = await storage.getDuasByCategory(mapping.duaCategory);
       const verses = await storage.searchAyahs(mapping.keywords[0]);
       const hadiths = await storage.searchHadith(mapping.keywords[0]);
-      
+
       res.json({
         scenario,
         duas: duas.slice(0, 3),
@@ -810,7 +852,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== BOOKS API ==============
-  
+
   // Get all books
   app.get("/api/books", async (req, res) => {
     try {
@@ -876,7 +918,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ============== TOPICS API (Knowledge Hub) ==============
-  
+
   // Get all topics
   app.get("/api/topics", async (req, res) => {
     try {
@@ -905,14 +947,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { slug } = req.params;
       const topic = await storage.getTopicBySlug(slug);
-      
+
       if (!topic) {
         return res.status(404).json({ message: "Topic not found" });
       }
 
       // Get topic content (Quran/Hadith/Book references)
       const content = await storage.getTopicContent(topic.id);
-      
+
       res.json({ topic, content });
     } catch (error) {
       console.error("Error fetching topic:", error);

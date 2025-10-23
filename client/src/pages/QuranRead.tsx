@@ -158,12 +158,12 @@ export default function QuranRead() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background islamic-pattern-bg">
       <Header />
 
       <main className="flex-1">
         {/* Sticky Controls */}
-        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b">
+        <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-md border-b shadow-sm">
           <div className="container py-3 md:py-4">
             <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start md:items-center gap-3 md:gap-4">
               <Button
@@ -220,8 +220,8 @@ export default function QuranRead() {
           <div className="max-w-4xl mx-auto">
             {/* Bismillah */}
             {surahId !== 1 && surahId !== 9 && (
-              <div className="text-center mb-8 md:mb-12">
-                <p className="font-arabic text-3xl md:text-4xl text-primary" dir="rtl">
+              <div className="text-center mb-8 md:mb-12 animate-fade-in-up">
+                <p className="font-arabic text-3xl md:text-4xl text-primary arabic-enhanced" dir="rtl">
                   بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
                 </p>
               </div>
@@ -229,12 +229,17 @@ export default function QuranRead() {
 
             {/* Continuous Reading */}
             <div className="space-y-6 md:space-y-8">
-              {ayahs.map((ayah) => (
-                <div key={ayah.id} className="group" data-testid={`ayah-${ayah.ayahNumber}`}>
+              {ayahs.map((ayah, index) => (
+                <div 
+                  key={ayah.id} 
+                  className="group bg-card/50 backdrop-blur-sm rounded-lg p-4 md:p-6 border border-card-border hover:border-primary/30 transition-all duration-300 card-elevate animate-fade-in-up" 
+                  data-testid={`ayah-${ayah.ayahNumber}`}
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
                   <div className="flex items-start gap-3 md:gap-4">
                     <Badge 
                       variant="outline" 
-                      className="flex-shrink-0 mt-1 h-7 w-7 md:h-8 md:w-8 flex items-center justify-center text-xs"
+                      className="flex-shrink-0 mt-1 h-7 w-7 md:h-8 md:w-8 flex items-center justify-center text-xs font-semibold glow-primary-hover"
                     >
                       {ayah.ayahNumber}
                     </Badge>
@@ -242,7 +247,7 @@ export default function QuranRead() {
                     <div className="flex-1 space-y-3 md:space-y-4">
                       {/* Arabic Text */}
                       <p 
-                        className="font-arabic text-xl md:text-2xl lg:text-3xl leading-loose md:leading-loose text-right cursor-pointer hover:text-primary transition-colors" 
+                        className="font-arabic text-xl md:text-2xl lg:text-3xl leading-loose md:leading-loose text-right cursor-pointer hover:text-primary transition-colors arabic-enhanced" 
                         dir="rtl"
                         onClick={() => handlePlayAudio(ayah)}
                       >

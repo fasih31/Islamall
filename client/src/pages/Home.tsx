@@ -106,11 +106,11 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <Hero />
 
-      <main className="container py-8 md:py-16 px-4 md:px-6 space-y-12 md:space-y-20">
+      <main className="flex-1 container py-12 md:py-16 space-y-16 animate-fade-in-up">
         {/* Quick Access Section */}
         <section>
           <h2 className="font-serif text-3xl font-bold text-center mb-8">Quick Access</h2>
